@@ -76,18 +76,34 @@ List<AppModel> apps = [
     title: "Linkedin",
     color: Colors.white,
     icon: Icons.ac_unit_outlined,
+    link: linkedIn,
   ),
-  AppModel(title: "Github", color: Colors.white, icon: Icons.ac_unit_outlined),
+  AppModel(
+    title: "Github",
+    color: Colors.white,
+    icon: Icons.ac_unit_outlined,
+    link: gitHub,
+  ),
   AppModel(
     title: "Education",
     color: Colors.white,
     icon: Icons.ac_unit_outlined,
   ),
-  AppModel(title: "Resume", color: Colors.white, icon: Icons.ac_unit_outlined),
-  AppModel(title: "Gamil", color: Colors.white, icon: Icons.ac_unit_outlined),
+  AppModel(
+    title: "Resume",
+    color: Colors.white,
+    icon: Icons.ac_unit_outlined,
+    link: resumeLink,
+  ),
+  AppModel(
+    title: "Gamil",
+    color: Colors.white,
+    icon: Icons.ac_unit_outlined,
+    link: email,
+  ),
 ];
 
-const String linkedIn = "www.linkedin.com/in/priyanshu-negi-72b077295";
+const String linkedIn = "https://www.linkedin.com/in/priyanshu-negi-72b077295/";
 const String gitHub = "https://github.com/priyanshunegi10";
 const String email = "npriyanshu377@gmail.com";
 const String resumeLink =
