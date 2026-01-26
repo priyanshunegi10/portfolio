@@ -2,8 +2,10 @@ import 'package:custom_button_builder/custom_button_builder.dart';
 import 'package:device_frame/device_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio/const/data.dart';
 import 'package:portfolio/providers/current_state.dart';
+import 'package:portfolio/widgets/blur_container.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,18 +22,25 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                colors: [Colors.blue, Colors.black45],
-              ),
-            ),
+          Selector<CurrentState, int>(
+            selector: (context, provider) => provider.knobSelected,
+            builder: (context, _, _) {
+              return Container(
+                decoration: BoxDecoration(
+                  gradient: colorPalette[currentState.knobSelected].gradient,
+                ),
+              );
+            },
           ),
-          SvgPicture.asset(
-            "assets/images/cloudy_blue.svg",
-            height: cloudImageSize.height,
-            fit: BoxFit.cover,
+          Selector<CurrentState, int>(
+            selector: (context, provider) => provider.knobSelected,
+            builder: (context, _, _) {
+              return SvgPicture.asset(
+                colorPalette[currentState.knobSelected].svgPath,
+                height: cloudImageSize.height,
+                fit: BoxFit.cover,
+              );
+            },
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -40,21 +49,123 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Column(
+                    children: [
+                      BlurContainer(height: 395, width: 247),
+                      SizedBox(height: 15),
+                      BlurContainer(height: 175, width: 247),
+                    ],
+                  ),
                   SizedBox(
                     height: cloudImageSize.height - 100,
                     child: Consumer<CurrentState>(
                       builder: (context, _, _) {
                         return DeviceFrame(
                           device: currentState.currentDevice,
-                          screen: const Center(
-                            child: Text(
-                              "Hello world",
-                              style: TextStyle(color: Colors.white),
+                          screen: Container(
+                            decoration: BoxDecoration(
+                              gradient: colorPalette[currentState.knobSelected]
+                                  .gradient,
+                            ),
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              alignment: WrapAlignment.start,
+                              children: [
+                                ...List.generate(
+                                  apps.length,
+                                  (index) => Container(
+                                    margin: EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      top: 70,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        CustomButton(
+                                          margin: EdgeInsets.only(bottom: 5),
+                                          borderRadius:
+                                              currentState.currentDevice ==
+                                                  Devices.ios.iPhone16ProMax
+                                              ? 8
+                                              : 100,
+                                          onPressed: () {},
+                                          width: 50,
+                                          height: 50,
+                                          backgroundColor: apps[index].color,
+                                          child: Center(
+                                            child: Icon(
+                                              apps[index].icon,
+                                              size: 20,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 60,
+                                          child: Center(
+                                            child: Flexible(
+                                              child: Text(
+                                                apps[index].title,
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 11,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );
                       },
                     ),
+                  ),
+                  Column(
+                    children: [
+                      BlurContainer(
+                        height: 395,
+                        width: 247,
+                        childG: Center(
+                          child: Wrap(
+                            children: [
+                              ...List.generate(
+                                colorPalette.length,
+                                (index) => Consumer<CurrentState>(
+                                  builder: (context, _, _) {
+                                    return CustomButton(
+                                      margin: EdgeInsets.all(10),
+                                      onPressed: () {
+                                        currentState.changeGradient(index);
+                                      },
+                                      pressed:
+                                          currentState.knobSelected == index
+                                          ? Pressed.pressed
+                                          : Pressed.notPressed,
+                                      animate: true,
+                                      isThreeD: true,
+                                      borderRadius: 100,
+                                      height: 52,
+                                      width: 52,
+                                      shadowColor: Colors.white,
+                                      backgroundColor:
+                                          colorPalette[index].color,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      BlurContainer(height: 175, width: 247),
+                    ],
                   ),
                 ],
               ),
