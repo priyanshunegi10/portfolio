@@ -2,11 +2,13 @@ import 'package:custom_button_builder/custom_button_builder.dart';
 import 'package:device_frame/device_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio/const/data.dart';
-import 'package:portfolio/pages/phone_home_page.dart';
+import 'package:portfolio/pages/home_page/phone_screen_wrapper.dart';
 import 'package:portfolio/providers/current_state.dart';
 import 'package:portfolio/widgets/blur_container.dart';
+import 'package:portfolio/widgets/rain_cloud.dart';
+import 'package:portfolio/widgets/tilt_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,6 +25,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
+          // 1. Background Gradient
           Selector<CurrentState, int>(
             selector: (context, provider) => provider.knobSelected,
             builder: (context, _, _) {
@@ -33,6 +36,12 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
+
+          // 2. Clouds
+          RainCloud(opposid: false, top: 20),
+          RainCloud(opposid: true, top: 280),
+
+          // 3. Bottom SVG Cloud Layer
           Selector<CurrentState, int>(
             selector: (context, provider) => provider.knobSelected,
             builder: (context, _, _) {
@@ -43,6 +52,8 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
+
+          // 4. Main Content (Glass Panels + Phone)
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -50,73 +61,151 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Column(
-                    children: [
-                      BlurContainer(height: 395, width: 247),
-                      SizedBox(height: 15),
-                      BlurContainer(height: 175, width: 247),
-                    ],
+                  // --- LEFT GLASS PANEL (With 3D Tilt) ---
+                  TiltWidget(
+                    isLeft: true,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Column(
+                        children: [
+                          BlurContainer(height: 395, width: 247),
+                          SizedBox(height: 15),
+                          BlurContainer(
+                            height: 175,
+                            width: 247,
+                            childG: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 25),
+                                  decoration: BoxDecoration(),
+                                  height: 60,
+                                  width: 60,
+                                  child: SvgPicture.asset(
+                                    "assets/icons/topmat.svg",
+                                    fit: BoxFit.cover,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                Text(
+                                  "Let's Connect!",
+                                  style: GoogleFonts.lato(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+
+                  // --- CENTER PHONE (No Tilt) ---
                   SizedBox(
                     height: cloudImageSize.height - 100,
                     child: Consumer<CurrentState>(
                       builder: (context, _, _) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            gradient: colorPalette[currentState.knobSelected]
-                                .gradient,
-                          ),
-                          child: DeviceFrame(
-                            device: currentState.currentDevice,
-                            screen: PhoneHomePage(),
+                        return DeviceFrame(
+                          device: currentState.currentDevice,
+                          screen: Container(
+                            decoration: BoxDecoration(
+                              gradient: colorPalette[currentState.knobSelected]
+                                  .gradient,
+                            ),
+                            child: PhoneScreenWrapper(
+                              childG: currentState.currentScreen,
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
-                  Column(
-                    children: [
-                      BlurContainer(
-                        height: 395,
-                        width: 247,
-                        childG: Center(
-                          child: Wrap(
-                            children: [
-                              ...List.generate(
-                                colorPalette.length,
-                                (index) => Consumer<CurrentState>(
-                                  builder: (context, _, _) {
-                                    return CustomButton(
-                                      margin: EdgeInsets.all(10),
-                                      onPressed: () {
-                                        currentState.changeGradient(index);
+
+                  // --- RIGHT GLASS PANEL (With 3D Tilt) ---
+                  TiltWidget(
+                    isLeft: false,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Column(
+                        children: [
+                          BlurContainer(
+                            height: 395,
+                            width: 247,
+                            childG: Center(
+                              child: Wrap(
+                                children: [
+                                  ...List.generate(
+                                    colorPalette.length,
+                                    (index) => Consumer<CurrentState>(
+                                      builder: (context, _, _) {
+                                        return CustomButton(
+                                          margin: EdgeInsets.all(10),
+                                          onPressed: () {
+                                            currentState.changeGradient(index);
+                                          },
+                                          pressed:
+                                              currentState.knobSelected == index
+                                              ? Pressed.pressed
+                                              : Pressed.notPressed,
+                                          animate: true,
+                                          isThreeD: true,
+                                          borderRadius: 100,
+                                          height: 52,
+                                          width: 52,
+                                          shadowColor: Colors.white,
+                                          backgroundColor:
+                                              colorPalette[index].color,
+                                        );
                                       },
-                                      pressed:
-                                          currentState.knobSelected == index
-                                          ? Pressed.pressed
-                                          : Pressed.notPressed,
-                                      animate: true,
-                                      isThreeD: true,
-                                      borderRadius: 100,
-                                      height: 52,
-                                      width: 52,
-                                      shadowColor: Colors.white,
-                                      backgroundColor:
-                                          colorPalette[index].color,
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 15),
+                          BlurContainer(
+                            height: 175,
+                            width: 247,
+                            childG: Container(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 40,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "The best way to predict the future is to invent it.",
+                                    style: GoogleFonts.lato(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "— Alan Kay",
+                                    style: GoogleFonts.lato(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 15),
-                      BlurContainer(height: 175, width: 247),
-                    ],
+                    ),
                   ),
                 ],
               ),
+
+              // 5. Bottom Device Selector Buttons
               SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
