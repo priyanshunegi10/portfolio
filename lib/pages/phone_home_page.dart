@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio/const/data.dart';
 import 'package:portfolio/providers/current_state.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PhoneHomePage extends StatelessWidget {
@@ -23,10 +22,9 @@ class PhoneHomePage extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
-          childAspectRatio:
-              0.8, // Adjusts height relative to width (tweak this to fit text)
-          mainAxisSpacing: 15, // Vertical space between rows
-          crossAxisSpacing: 15, // Horizontal space between apps
+          childAspectRatio: 0.7,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
         ),
         itemCount: apps.length,
         itemBuilder: (context, index) {
@@ -36,9 +34,8 @@ class PhoneHomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               CustomButton(
-                width: 60,
-                height: 60,
-                // Only curve corners if it's an iPhone 16 Pro Max, else circle
+                width: 75,
+                height: 75,
                 borderRadius:
                     currentState.currentDevice == Devices.ios.iPhone16ProMax
                     ? 10
@@ -47,7 +44,7 @@ class PhoneHomePage extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 5),
                 onPressed: () async {
                   if (app.link != null) {
-                    // CHECK: Agar ye Gmail hai, toh Mailto scheme use karo
+                    // Logic for Gmail vs Normal Links
                     if (app.title == "Gmail" || app.link!.contains("@")) {
                       final Uri emailLaunchUri = Uri(
                         scheme: 'mailto',
@@ -59,14 +56,15 @@ class PhoneHomePage extends StatelessWidget {
                       try {
                         await launchUrl(emailLaunchUri);
                       } catch (e) {
-                        // Agar phone mein koi email app nahi hai
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("No email client found!")),
-                        );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("No email client found!"),
+                            ),
+                          );
+                        }
                       }
-                    }
-                    // Agar normal link (LinkedIn/GitHub/Resume) hai
-                    else {
+                    } else {
                       currentState.launchInBrowser(app.link!);
                     }
                   } else if (app.screen != null) {
@@ -77,28 +75,28 @@ class PhoneHomePage extends StatelessWidget {
                     );
                   }
                 },
+                // FIXED: SVG Logic Removed, only PNG supported now
                 child: app.assetPath != null
-                    ? app.assetPath!.endsWith(".svg")
-                          ? SvgPicture.asset(
-                              app.assetPath!,
-                              width: 30,
-                              height: 30,
-                            )
-                          : Image.asset(app.assetPath!, width: 30, height: 30)
+                    ? Image.asset(
+                        app.assetPath!,
+                        width: 50, // Icon size adjust kar lena agar chhota lage
+                        height: 50,
+                        fit: BoxFit.contain,
+                      )
                     : Center(
                         child: Icon(app.icon, size: 30, color: Colors.black),
                       ),
               ),
               // App Title
               SizedBox(
-                width: 60, // Constrain text width
+                width: 60,
                 child: Text(
                   app.title,
-                  textAlign: TextAlign.center, // Center align text
-                  maxLines: 1, // Prevent text from breaking layout
-                  overflow: TextOverflow.ellipsis, // Add "..." if too long
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
-                    fontSize: 10, // Slightly smaller for better fit
+                    fontSize: 15,
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
