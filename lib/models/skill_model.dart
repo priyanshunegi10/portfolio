@@ -1,13 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-class SkillsModel {
-  final String skillName;
-  final Color colorS;
-  final String? iconPath;
-
-  SkillsModel({
-    required this.skillName,
-    required this.colorS,
-    this.iconPath,
-  });
+class SkillModel {
+  final String name;
+  final Color color;
+  SkillModel(this.name, this.color);
 }

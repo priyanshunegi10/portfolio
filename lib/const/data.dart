@@ -4,8 +4,10 @@ import 'package:portfolio/models/app_model.dart';
 import 'package:portfolio/models/colors_model.dart';
 import 'package:portfolio/models/devices_model.dart';
 import 'package:portfolio/models/experience_model.dart';
+import 'package:portfolio/models/project_model.dart';
 import 'package:portfolio/models/skill_model.dart';
 import 'package:portfolio/pages/mini_project/about_section/about_screen.dart';
+import 'package:portfolio/pages/mini_project/project_screen/project_screen.dart';
 import 'package:portfolio/pages/mini_project/skills_section/skills_screen.dart';
 import 'package:portfolio/pages/mini_project/education_section/education_screen.dart';
 
@@ -80,7 +82,7 @@ List<AppModel> apps = [
     color: Colors.white,
     // icon: Icons.ac_unit_outlined,
     screen: AboutScreen(),
-    assetPath: "assets/icons/user.png",
+    assetPath: "assets/icons/man.png",
   ),
   AppModel(
     title: "Skills",
@@ -94,82 +96,98 @@ List<AppModel> apps = [
     color: Colors.white,
     //icon: Icons.ac_unit_outlined,
     link: linkedIn,
-    assetPath: "assets/icons/linkedin.svg",
+    assetPath: "assets/icons/linkedin.png",
   ),
   AppModel(
     title: "Github",
     color: Colors.white,
     //icon: Icons.ac_unit_outlined,
     link: gitHub,
-    assetPath: "assets/icons/github.svg",
+    assetPath: "assets/icons/github.png",
   ),
   AppModel(
     title: "Education",
     color: Colors.white,
     //icon: Icons.ac_unit_outlined,
     screen: EducationScreen(),
-    assetPath: "assets/icons/graduation.png",
+    assetPath: "assets/icons/education.png",
   ),
   AppModel(
     title: "Resume",
     color: Colors.white,
     //icon: Icons.ac_unit_outlined,
     link: resumeLink,
-    assetPath: "assets/icons/resume.png",
+    assetPath: "assets/icons/cv.png",
   ),
   AppModel(
-    title: "Gamil",
+    title: "Gmail",
     color: Colors.white,
     //icon: Icons.ac_unit_outlined,
     link: email,
-    assetPath: "assets/icons/gmail.svg",
+    assetPath: "assets/icons/gmail.png",
+  ),
+  AppModel(
+    title: "Projects",
+    color: Colors.white,
+    screen: ProjectsScreen(),
+    assetPath: "assets/icons/project.png",
   ),
 ];
 
 const String linkedIn = "https://www.linkedin.com/in/priyanshu-negi-72b077295/";
 const String gitHub = "https://github.com/priyanshunegi10";
-const String email = "npriyanshu377@gmail.com";
+const String email = "https://npriyanshu377@gmail.com";
 const String resumeLink =
-    "https://docs.google.com/document/d/1NPTwCFFpkBX16UTTbt-vk1xhg1KGWqIq/edit?usp=drive_link&ouid=102046719414048051211&rtpof=true&sd=true";
+    "https://drive.google.com/file/d/1eEPX2uPfgRBxadrOOFRrZMxCzuyk_R5W/view?usp=drive_link";
 const String introduction =
-    "Welocome to my Portfolio Website,As a Computer Science undergraduate specializing in Mobile Application Development, I combine strong engineering fundamentals with practical coding skills. My primary weapon of choice is Flutter (Dart), which I use to build cross-platform applications that are both performant and scalable.\nBeyond mobile dev, I have a solid grounding in Java, Data Science, and Software Engineering methodologies (SDLC, Agile). I believe in writing clean, maintainable code and am currently focused on integrating AI and Machine Learning into mobile ecosystems.";
+    "Welocome to my Portfolio Website,As a Computer Science undergraduate specializing in Mobile Application Development, I combine strong engineering fundamentals with practical coding skills. My primary weapon of choice is Flutter (Dart), which I use to build cross-platform applications that are both performant and scalable.\nBeyond mobile dev, I have a solid grounding in Java, and C++. I believe in writing clean, maintainable code and am currently focused on integrating AI and Machine Learning into mobile ecosystems.";
 
-List<SkillsModel> skills = [
-  SkillsModel(skillName: "Flutter", colorS: Colors.blue, iconPath: "random"),
-  SkillsModel(skillName: "Firebase", colorS: Colors.yellow),
-  SkillsModel(skillName: "Github", colorS: Colors.orange),
-  SkillsModel(skillName: "Dart", colorS: Colors.blue),
-  SkillsModel(skillName: "C++", colorS: Colors.yellow),
-  SkillsModel(skillName: "JAVA", colorS: Colors.orange),
-  SkillsModel(skillName: "VSCode", colorS: Colors.blue),
-  SkillsModel(skillName: "Android Studio", colorS: Colors.yellow),
-  SkillsModel(skillName: "REST API", colorS: Colors.orange),
-  SkillsModel(skillName: "Postman", colorS: Colors.blue),
-  SkillsModel(skillName: "C", colorS: Colors.yellow),
-  SkillsModel(skillName: "HTML", colorS: Colors.orange),
-  SkillsModel(skillName: "CSS", colorS: Colors.blue),
-];
-
-List<SkillsModel> languages = [
-  SkillsModel(skillName: "Hindi", colorS: Colors.black),
-  SkillsModel(skillName: "English", colorS: Colors.blueGrey),
+ 
+// Tumhare Projects ka Data
+List<ProjectModel> myProjects = [
+  ProjectModel(
+    title: "Event Booking App",
+    description:
+        "Admin & User panels with real-time ticket syncing via Firestore. Includes dynamic theme switching.",
+    techStack: "Flutter • MultiProvider • Firebase",
+    githubLink: "https://github.com/priyanshunegi10/event_booking_app",
+    color: Colors.orangeAccent.withOpacity(0.2),
+  ),
+  ProjectModel(
+    title: "Smart Waste Management",
+    description:
+        "AI-powered waste classification using Imagga API and Google Maps for location tracking.",
+    techStack: "Dart • REST API • Google Maps",
+    githubLink: "https://github.com/priyanshunegi10/waste_management",
+    color: Colors.greenAccent.withOpacity(0.2),
+  ),
+  ProjectModel(
+    title: "Portfolio App",
+    description:
+        "Interactive portfolio with dynamic device frames and state management.",
+    techStack: "Flutter • Provider • Animations",
+    githubLink: "https://github.com/priyanshunegi10/portfolio",
+    color: Colors.blueAccent.withOpacity(0.2),
+  ),
 ];
 final List<JobExperience> education = [
   JobExperience(
-    color: Colors.red,
-    location: "Delhi, India",
-    title: '10th and 12th',
-    company: 'Sarvodya Vidyalaya aliganj lodi colony',
+    color: Colors.orangeAccent, // Changed to a warmer tone
+    location: "New Delhi, India",
+    title: 'High School (10th & 12th)',
+    company: 'Sarvodaya Vidyalaya, Aliganj',
     endDate: 'Feb 2023',
-    bulletPoints: ["Some of the best years of school life"],
   ),
   JobExperience(
-    color: Colors.blue,
-    location: "Haryana faridabad, India",
-    title: 'Bachelor in computer application',
-    company: 'Echelon institute of technology ',
-    endDate: 'June 2026',
-    bulletPoints: ['Currently in the final year of my college!'],
+    color: Colors.blueAccent,
+    location: "Faridabad, India",
+    title: 'Bachelors in Computer Application',
+    company: 'Echelon Institute of Technology',
+    endDate: 'Present (Grad. 2026)',
+    bulletPoints: [
+      'Specializing in Mobile App Development (Flutter).',
+      'Final Year Student working on live projects.',
+    ],
   ),
 ];
 

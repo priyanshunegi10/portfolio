@@ -78,7 +78,6 @@ class _RainCloudState extends State<RainCloud> {
                       onTap: () {
                         playRain();
                       },
-
                       child: Rive(
                         useArtboardSize: true,
                         fit: BoxFit.cover,

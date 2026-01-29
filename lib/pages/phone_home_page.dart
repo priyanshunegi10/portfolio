@@ -6,6 +6,7 @@ import 'package:portfolio/const/data.dart';
 import 'package:portfolio/providers/current_state.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PhoneHomePage extends StatelessWidget {
   const PhoneHomePage({super.key});
@@ -17,14 +18,11 @@ class PhoneHomePage extends StatelessWidget {
       listen: false,
     );
     return Container(
-      // Outer padding for the whole screen area
       padding: const EdgeInsets.only(left: 20, right: 20, top: 70),
       child: GridView.builder(
-        // Disable GridView scrolling if you want the phone frame to handle scrolling
-        // or set to AlwaysScrollableScrollPhysics() if needed.
         physics: const BouncingScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4, // 4 Apps per row (standard for phones)
+          crossAxisCount: 4,
           childAspectRatio:
               0.8, // Adjusts height relative to width (tweak this to fit text)
           mainAxisSpacing: 15, // Vertical space between rows
@@ -47,9 +45,30 @@ class PhoneHomePage extends StatelessWidget {
                     : 100,
                 backgroundColor: app.color,
                 margin: const EdgeInsets.only(bottom: 5),
-                onPressed: () {
+                onPressed: () async {
                   if (app.link != null) {
-                    currentState.launchInBrowser(app.link!);
+                    // CHECK: Agar ye Gmail hai, toh Mailto scheme use karo
+                    if (app.title == "Gmail" || app.link!.contains("@")) {
+                      final Uri emailLaunchUri = Uri(
+                        scheme: 'mailto',
+                        path: app.link!,
+                        query:
+                            'subject=Hiring Inquiry&body=Hi Priyanshu, I saw your portfolio...',
+                      );
+
+                      try {
+                        await launchUrl(emailLaunchUri);
+                      } catch (e) {
+                        // Agar phone mein koi email app nahi hai
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("No email client found!")),
+                        );
+                      }
+                    }
+                    // Agar normal link (LinkedIn/GitHub/Resume) hai
+                    else {
+                      currentState.launchInBrowser(app.link!);
+                    }
                   } else if (app.screen != null) {
                     currentState.changeScreen(
                       app.screen!,
@@ -60,16 +79,12 @@ class PhoneHomePage extends StatelessWidget {
                 },
                 child: app.assetPath != null
                     ? app.assetPath!.endsWith(".svg")
-                        ? SvgPicture.asset(
-                            app.assetPath!,
-                            width: 30,
-                            height: 30,
-                          )
-                        : Image.asset(
-                            app.assetPath!,
-                            width: 30,
-                            height: 30,
-                          )
+                          ? SvgPicture.asset(
+                              app.assetPath!,
+                              width: 30,
+                              height: 30,
+                            )
+                          : Image.asset(app.assetPath!, width: 30, height: 30)
                     : Center(
                         child: Icon(app.icon, size: 30, color: Colors.black),
                       ),

@@ -5,7 +5,7 @@ class JobExperience {
   final String company;
 
   final String endDate;
-  final List<String> bulletPoints;
+  final List<String>? bulletPoints;
   final String location;
   final Color color;
   JobExperience({
@@ -15,6 +15,6 @@ class JobExperience {
     required this.company,
 
     required this.endDate,
-    required this.bulletPoints,
+     this.bulletPoints,
   });
 }
