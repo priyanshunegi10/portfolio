@@ -75,4 +75,4 @@ To build the highly optimized release bundle with canvaskit/html web renderers:
 flutter build web --release --base-href "/portfolio/"
 ```
 
-
+⭐ If you liked this project, don't forget to give it a Star!
