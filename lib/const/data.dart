@@ -134,7 +134,7 @@ List<AppModel> apps = [
   ),
 ];
 
-const String linkedIn = "https://www.linkedin.com/in/priyanshu-negi-72b077295/";
+const String linkedIn = "https://www.linkedin.com/in/priyanshunegi28/";
 const String gitHub = "https://github.com/priyanshunegi10";
 const String email = "https://npriyanshu377@gmail.com";
 const String resumeLink =
